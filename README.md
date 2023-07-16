@@ -2,7 +2,7 @@
 
 Rhetoritask is a Flask web application that displays speaker rankings for public speaking tournaments. It retrieves data from a Google Spreadsheet used to tabulate the tournament results and presents the rankings in an easy-to-read format.
 
-**DISCLAIMER:** Rhetoritask (this spreadsheet version) is a temporary solution while I work on developing a full-fledged application with real-time data tabulation and advanced features. It serves as an interim solution until completion of the API integration.
+**DISCLAIMER:** Rhetoritask (this spreadsheet extension) is a temporary solution while I work on developing a full-fledged application with real-time data tabulation and advanced features. It serves as an interim solution until completion of the API integration.
 
 ## Features
 
@@ -30,8 +30,8 @@ Otherwise, follow the steps below. It might also be much easier for you to navig
 3. Create and activate virtual environment(optional but recommended):
 
     ```shell
-    $ python3 -m venv myenv
-    $ source myenv/bin/activate
+    $ python3 -m venv venv
+    $ source venv/bin/activate
     ```
 
 4. Install the required dependencies:
@@ -53,6 +53,7 @@ Alternatively (recommended because I am yet to make public the fully scripted sp
     - The Speaker raning sheet must have columns as arranged below:
         | Speaker Name  | Round 1    | Round 2 | ..... | ...... | Average |
         | ------------- |:----------:|:-------:|:-----:|:------:|--------:|
+        | ------------- |:----------:|:-------:|:-----:|:------:|--------:|
 
     Make sure each round point per speaker is derived from the other worksheets and the average calculated by formula below:
 
@@ -71,7 +72,7 @@ Alternatively (recommended because I am yet to make public the fully scripted sp
 
 ## Deployment
 Once you have tested the app, you might want to deploy it so that anyone with the Speaker Rankings link can view the site. This would enable students and teachers have a slightly better understanding of how they're progressing. Follow the steps below:
-- Kindly hold as I work on this. REach out to me otherwise.
+- Currently working on easiest way to direct one to do this. Reach out to me for a tailored solution.
 
 ## Disclaimer
 
