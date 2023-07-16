@@ -37,7 +37,7 @@ Otherwise, follow the steps below. It might also be much easier for you to navig
 4. Install the required dependencies:
 
     ```shell
-    pip install -r requirements.txt
+    $ pip install -r requirements.txt
     ```
 
 5. Set up your google spreadsheet credentials:
@@ -71,11 +71,11 @@ Alternatively (recommended because I am yet to make public the fully scripted sp
 
 ## Deployment
 Once you have tested the app, you might want to deploy it so that anyone with the Speaker Rankings link can view the site. This would enable students and teachers have a slightly better understanding of how they're progressing. Follow the steps below:
-    - Kindly hold as I work on this. REach out to me otherwise.
+- Kindly hold as I work on this. REach out to me otherwise.
 
 ## Disclaimer
 
-Please be aware that rhetoritas is a temporary solution and is not a fully featured application at this time. While it provides a way to display the speaker rankings and points per round based on real tournament data, it is still incapable of tabulating data and I am actively working on the API integration to enhance features and functionality of rhetoritask and enable tabulation of speech tournament as we do for debates.
+Please be aware that rhetoritask is a temporary solution and is not a fully featured application at this time. While it provides a way to display the speaker rankings and points per round based on real tournament data, it is still incapable of tabulating data and I am actively working on the API integration to enhance features and functionality of rhetoritask and enable tabulation of speech tournament as we do for debates.
 
 
 ### Contact

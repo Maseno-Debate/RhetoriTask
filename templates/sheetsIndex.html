@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Speaker Rankings</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='sheets.css') }}">
+</head>
+<body>
+    <h1>Public Speakers</h1>
+    <h2>Tournament name</h2>
+    <table>
+        <tbody class="tableBody">
+            {% for row in data %}
+                {% if loop.index == 1 %}
+                    <tr class="tableRow">
+                        <th>Rank</th>
+                        {% for value in row %}
+                            <th>{{ value }}</th>
+                        {% endfor %}
+                    </tr>
+                {% else %}
+                    <tr class="tableRow">
+                        <td>{{ loop.index - 1 }}</td>
+                        {% for value in row %}
+                            {% if value is none %}
+                                <td class="tableData blank">{{ value }}</td>
+                            {% else %}
+                                <td class="tableData">{{ value }}</td>
+                            {% endif %}
+                        {% endfor %}
+                    </tr>
+                {% endif %}
+            {% endfor %}
+        </tbody>
+    </table>
+    <script src="{{ url_for('static', filename='sheets.js') }}"></script>
+</body>
+</html>
