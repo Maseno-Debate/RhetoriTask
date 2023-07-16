@@ -53,7 +53,6 @@ Alternatively (recommended because I am yet to make public the fully scripted sp
     - The Speaker raning sheet must have columns as arranged below:
         | Speaker Name  | Round 1    | Round 2 | ..... | ...... | Average |
         | ------------- |:----------:|:-------:|:-----:|:------:|--------:|
-        | ------------- |:----------:|:-------:|:-----:|:------:|--------:|
 
     Make sure each round point per speaker is derived from the other worksheets and the average calculated by formula below:
 
