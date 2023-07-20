@@ -53,10 +53,10 @@ Alternatively (recommended because I am yet to make public the fully scripted sp
     - The Speaker raning sheet must have columns as arranged below:
         | Speaker Name  | Round 1    | Round 2 | ..... | ...... | Average |
         | ------------- |:----------:|:-------:|:-----:|:------:|--------:|
-
+    - The spreadsheet is ran by app script, in the `static/appScripts/code.gs` folder.
     Make sure each round point per speaker is derived from the other worksheets and the average calculated by formula below:
 
-***NOTE:***Do not forget to sort the sheet with your average column from Z to A after any changes on the spreadsheet.
+***NOTE:*** Do not forget to sort the sheet with your average column from Z to A after any changes on the spreadsheet.
 
 > Once you have the spreadsheet, get its ID from its URL, and add it to the ggsheets.py file where it says `SPREADHEET_ID`.
 > Replace the commented text `write ID here` with your spreadsheet id.
