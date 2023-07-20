@@ -54,7 +54,7 @@ Alternatively (recommended because I am yet to make public the fully scripted sp
         | Speaker Name  | Round 1    | Round 2 | ..... | ...... | Average |
         | ------------- |:----------:|:-------:|:-----:|:------:|--------:|
     - The spreadsheet is ran by app script, in the `static/appScripts/code.gs` file.
-    Make sure each round point per speaker is derived from the other worksheets and the average calculated by formula below:
+    - Make sure each round point per speaker is derived from the other worksheets and the average calculated by formula below:
 
 ***NOTE:*** Do not forget to sort the sheet with your average column from Z to A after any changes on the spreadsheet.
 
