@@ -81,10 +81,10 @@ function processRooms(roomsSheet, roomsNumber){
 
 function randomPlacement(speakers, judges, rooms){
   var placement = [];
-  var speakersPerRoom = Math.round(speakers.length / rooms.length);
-  var remainingSpeakers = rooms.length % speakers.length;
-  var judgesPerRoom = Math.round(judges.length / rooms.length);
-  var remainingJudges = rooms.length % judges.length;
+  var speakersPerRoom = Math.floor(speakers.length / rooms.length);
+  var remainingSpeakers = speakers.length - (speakersPerRoom * rooms.length);
+  var judgesPerRoom = Math.floor(judges.length / rooms.length);
+  var remainingJudges = judges.length - (judgesPerRoom * rooms.length);
   var roomsNumber = rooms.length;
   
   for (var i = 0; i < roomsNumber; i++){
@@ -96,47 +96,66 @@ function randomPlacement(speakers, judges, rooms){
     
     for (var j = 0; j < speakersPerRoom; j++){
       var z = Math.floor(Math.random() * speakers.length);
-      var speaker = speakers[z];
+      if (speakers[z]){
+        var speaker = speakers[z];
 
-      roomSpeakers.push(speaker);
-      speakers.splice(speakers.indexOf(speaker), 1);
+        roomSpeakers.push(speaker);
+        speakers.splice(speakers.indexOf(speaker), 1);
+      }
+      else{
+        break;
+      }
+      
     }
 
     for (var k = 0; k < judgesPerRoom; k++){
       var y = Math.floor(Math.random() * judges.length);
-      var judge = judges[y][0];
+      if (judges[y]){
+        var judge = judges[y][0];
 
-      //Logger.log(y);
-      roomJudges.push(judge);
-      judges.splice(judges.indexOf(judges[y]), 1);
+        //Logger.log(y);
+        roomJudges.push(judge);
+        judges.splice(judges.indexOf(judges[y]), 1);
+      } 
+      else{
+        break;
+      }
     }
     
     // Add the remaining speakers and judges to last room
-    if (i == rooms.length - 1){
-      if (remainingSpeakers == 1){
-        roomSpeakers.push(speakers[0]);
-      }
-      else if (remainingSpeakers > 1){
-        for (var l = 0; l < speakers.length; l++){
-          roomSpeakers.push(speakers[l])
-        }
-      }
-      
-      if (remainingJudges == 1){
-        roomJudges.push(judges[0][0]);
-      }
-      else if (remainingJudges > 1){
-        for (var m = 0; m < judges.length; m++){
-          roomJudges.push(judges[m][0]);
-        }
-      }
-    }
     room.push(rooms[i]);
     fullRoom.push(room, roomSpeakers, roomJudges);
     placement.push(fullRoom);
   }
+
+  SpreadsheetApp.getUi().alert(`Placement: ${placement} \nRemaining JUdges: ${judges} \nRemaining Speakers: ${speakers}`);
+  if (remainingSpeakers > 0 || remainingJudges > 0){
+    //var remainingPlacement = randomPlacement(speakers, judges, rooms);
+    var p = 0;
+    var u = 0;
+
+    for (var n = 0; n < placement.length; n++){
+        if (remainingSpeakers > 0){
+          var speaker = speakers[p];
+          placement[n][1].push(speaker);
+          speakers.splice(speakers.indexOf(speaker), 1);
+          p++;
+          remainingSpeakers--;
+        }
+        if (remainingJudges > 0){
+          var judge = judges[u];
+          placement[n][2].push(judge);
+          judges.splice(judges.indexOf(judge), 1);
+          u++;
+          remainingJudges--;
+        }
+    }
+  }
+  
   return placement;
 }
+
+
 
 /**
 * createRound - creates a round sheet displaying the rooms each with their speakers and judges
@@ -147,13 +166,23 @@ function randomPlacement(speakers, judges, rooms){
 function createRound(placement, roundName){
   var currSpreadsheet = SpreadsheetApp.getActiveSpreadsheet();
   var newSheetName = roundName;
+  
+  var cellColor = "#b7e1cd";
+  var headColor = "#e1b7b7";
 
   // Create a new sheet and get ref variable
   var newSheet = currSpreadsheet.insertSheet(newSheetName);
-  var roomRow = 1;
+  var headers = ["Rooms", "Speakers", "Judges"];
+  for (var x = 1; x <= headers.length; x++){
+    var setCell = newSheet.getRange(1, x)
+    setCell.setValue(headers[x - 1]);
+    setCell.setBackground(headColor);
+  }
+
+  var roomRow = 2;
   var roomColumn = 1;
-  var speakersRow = 1;
-  var judgesRow = 1;
+  var speakersRow = 2;
+  var judgesRow = 2;
   var y = roomColumn;
 
   
@@ -167,6 +196,7 @@ function createRound(placement, roundName){
     // Set value of room name
     var roomCell = newSheet.getRange(roomRow, roomColumn);
     roomCell.setValue(roomName);
+    roomCell.setBackground(cellColor)
 
     
     
@@ -176,6 +206,7 @@ function createRound(placement, roundName){
       var currSpeaker = speakersArr[j];
 
       speakerCell.setValue(currSpeaker);
+      speakerCell.setBackground(cellColor)
       speakersRow++;
     }
 
@@ -185,6 +216,7 @@ function createRound(placement, roundName){
       var currJudge = judgeArr[k];
 
       judgeCell.setValue(currJudge);
+      judgeCell.setBackground(cellColor);
       judgesRow++;
     }
 
@@ -201,19 +233,6 @@ function createRound(placement, roundName){
     }
     
   } 
-}
-
-/**
- * getObjKeys - gets array of keys from an object
- * Return: arr (array of the keys) 
- */
-
-function getObjKeys(object){
-  var arr = [];
-  for (key in object){
-    arr.push(key);
-  }
-  return arr;
 }
 
 
