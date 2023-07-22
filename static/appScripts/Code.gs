@@ -93,7 +93,7 @@ function randomPlacement(speakers, judges, rooms){
     var roomSpeakers = [];
     var roomJudges = [];
 
-    
+    //SpreadsheetApp.getUi().alert(`Speaers: ${speakers} \nJudges: ${judges}`)
     for (var j = 0; j < speakersPerRoom; j++){
       var z = Math.floor(Math.random() * speakers.length);
       if (speakers[z]){
@@ -131,27 +131,39 @@ function randomPlacement(speakers, judges, rooms){
   SpreadsheetApp.getUi().alert(`Placement: ${placement} \nRemaining JUdges: ${judges} \nRemaining Speakers: ${speakers}`);
   if (remainingSpeakers > 0 || remainingJudges > 0){
     //var remainingPlacement = randomPlacement(speakers, judges, rooms);
-    var p = 0;
+    //var p = 0;
     var u = 0;
 
     for (var n = 0; n < placement.length; n++){
-        if (remainingSpeakers > 0){
-          var speaker = speakers[p];
-          placement[n][1].push(speaker);
-          speakers.splice(speakers.indexOf(speaker), 1);
-          p++;
-          remainingSpeakers--;
+        if (speakers.length > 0){
+          var p = Math.floor(Math.random() * speakers.length)
+          if (speakers[p]){
+            var speaker = speakers[p];
+
+            placement[n][1].push(speaker);
+            speakers.splice(speakers.indexOf(speaker), 1);
+          }
+          else{
+            break;
+          }
+          
         }
-        if (remainingJudges > 0){
-          var judge = judges[u];
-          placement[n][2].push(judge);
-          judges.splice(judges.indexOf(judge), 1);
-          u++;
-          remainingJudges--;
+        if (judges.length > 0){
+          var u = Math.floor(Math.random() * judges.length);
+
+          if (judges[u]){
+            var judge = judges[u][0];
+
+            placement[n][2].push(judge);
+            judges.splice(judges.indexOf(judges[u]), 1);
+          }
+          else{
+            break;
+          }
         }
     }
   }
-  
+  SpreadsheetApp.getUi().alert(`Placement: ${placement} \nJudges: ${judges} \nSpeakers: ${speakers}`);
   return placement;
 }
 
