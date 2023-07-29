@@ -47,7 +47,7 @@ Otherwise, follow the steps below. It might also be much easier for you to navig
 - Download the credentials file and rename to `credentials.json` then add to the `rhetoritask/data` directory
 
 6. Set up your google spreadsheet:
-You can copy this [spreadsheet]() to your google account and go to instructions to now how to make use of it with this app.
+You can make a copy of this [spreadsheet](https://docs.google.com/spreadsheets/d/1WgernyF6orl2tmdWXcp9N1TBTgYkFppHOmgA58fB9rg/edit#gid=527790456) to your google account and go to instructions to now how to make use of it with this app.
 Alternatively (recommended because I am yet to make public the fully scripted spreadsheet), you can create your own spreadsheet then:
     - Make sure it has a sheet called `Speaker Rankings`
     - The Speaker raning sheet must have columns as arranged below:
