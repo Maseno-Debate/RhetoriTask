@@ -25,27 +25,26 @@ function processSpeakers(speakers_sheet) {
 */
 
 function processJudges(judgeSheet){
-  var judges =[];
+  var chiefJudges =[];
+  var depChiefJudges = [];
+  var panelJudges = [];
+  var judges = [];
   var data = (judgeSheet.getDataRange()).getValues();
-
+  
+  //TODO: Remove judge level in new judges array
   for (var i = 1; i < data.length; i++){
-    var judge = [];
-    var judgeName = data[i][0];
-    var judgeLevel = data[i][1];
+      var judgeName = data[i][0];
+      var judgeLevel = data[i][1];
 
-    if (judgeLevel == "Novice")
-      judgeLevel = 1;
-    else if(judgeLevel == "Intermediate")
-      judgeLevel = 2;
-    else if (judgeLevel == "Pro")
-      judgeLevel = 3;
-    else
-      judgeLevel = 0;
-    judge.push(judgeName);
-    judge.push(judgeLevel);
-    judges.push(judge);
-
+      if (judgeLevel == "Expert")
+        chiefJudges.push(judgeName);
+      else if (judgeLevel == "Intermediate")
+        depChiefJudges.push(judgeName);
+      else if (judgeLevel == "Novice")
+        panelJudges.push((judgeName));
   }
+  judges.push(chiefJudges, depChiefJudges, panelJudges);
+  //SpreadsheetApp.getUi().alert(`Judges: ${judges}`)
   return judges;
 }
 
@@ -64,12 +63,13 @@ function processRooms(roomsSheet, roomsNumber){
     var room = [];
     var roomNumb = data[i][0];
     //var codeName = data[i][1];
-    room.push(roomNumb)//, codeName);
+    room.push(roomNumb);//, codeName);
 
     rooms.push(room);
   }
   return rooms;
 }
+
 
 /**
 * randomPlacement - distributes the speakers and judges at random in given rooms
@@ -83,78 +83,83 @@ function randomPlacement(speakers, judges, rooms){
   var placement = [];
   var speakersPerRoom = Math.floor(speakers.length / rooms.length);
   var remainingSpeakers = speakers.length - (speakersPerRoom * rooms.length);
-  var judgesPerRoom = Math.floor(judges.length / rooms.length);
-  var remainingJudges = judges.length - (judgesPerRoom * rooms.length);
-  var roomsNumber = rooms.length;
+  var judgesNumber = 0;
+
+  for (var i = 0; i < judges.length; i++){
+    for(var j = 0; j < judges[i].length; j++)
+        judgesNumber++;
+  }
   
+  var judgesPerRoom = Math.floor(judgesNumber / rooms.length);
+  var remainingJudges = judgesNumber - (judgesPerRoom * rooms.length);
+  var roomsNumber = rooms.length;
+  //SpreadsheetApp.getUi().alert(`judges: ${roomsNumber}`);
   for (var i = 0; i < roomsNumber; i++){
+
     var fullRoom = [];
     var room = [];
     var roomSpeakers = [];
     var roomJudges = [];
+    //var j, k, t, y, z; 
 
-    
-    for (var j = 0; j < speakersPerRoom; j++){
+    //SpreadsheetApp.getUi().alert(`Speaers: ${speakers} \nJudges: ${judges}`)
+    for (j = 0; j < speakersPerRoom; j++){
       var z = Math.floor(Math.random() * speakers.length);
       if (speakers[z]){
-        var speaker = speakers[z];
+        //var speaker = speakers[z];
 
-        roomSpeakers.push(speaker);
-        speakers.splice(speakers.indexOf(speaker), 1);
+        roomSpeakers.push(speakers[z]);
+        speakers.splice(speakers.indexOf(speakers[z]), 1);
       }
       else{
         break;
       }
       
     }
-
+    
+    //SpreadsheetApp.getUi().alert(`RoomJUdges: ${roomJudges}`);
     for (var k = 0; k < judgesPerRoom; k++){
-      var y = Math.floor(Math.random() * judges.length);
-      if (judges[y]){
-        var judge = judges[y][0];
-
-        //Logger.log(y);
-        roomJudges.push(judge);
-        judges.splice(judges.indexOf(judges[y]), 1);
-      } 
-      else{
-        break;
+      for (var t = 0; t < judges.length; t++){
+        if (judges[t].length > 0){
+          var y = Math.floor(Math.random() * judges[t].length);
+          if (k === 0)
+            roomJudges.push(judges[t][y] + " ©");
+          else
+            roomJudges.push(judges[t][y]);
+          judges[t].splice(judges[t].indexOf(judges[t][y]), 1);
+          break;
+        }
       }
     }
-    
-    // Add the remaining speakers and judges to last room
     room.push(rooms[i]);
     fullRoom.push(room, roomSpeakers, roomJudges);
     placement.push(fullRoom);
   }
 
-  SpreadsheetApp.getUi().alert(`Placement: ${placement} \nRemaining JUdges: ${judges} \nRemaining Speakers: ${speakers}`);
+  //SpreadsheetApp.getUi().alert(`Placement: $ \nRemaining JUdges[0]: ${judges[0]} \nJudges[1]: ${judges[1]} \nJudges[2]: ${judges[2]}`);
   if (remainingSpeakers > 0 || remainingJudges > 0){
-    //var remainingPlacement = randomPlacement(speakers, judges, rooms);
-    var p = 0;
-    var u = 0;
 
     for (var n = 0; n < placement.length; n++){
-        if (remainingSpeakers > 0){
-          var speaker = speakers[p];
-          placement[n][1].push(speaker);
-          speakers.splice(speakers.indexOf(speaker), 1);
-          p++;
-          remainingSpeakers--;
+      
+      if (speakers.length > 0){
+        var p = Math.floor(Math.random() * speakers.length);
+        placement[n][1].push(speakers[p]);
+        speakers.splice(speakers.indexOf(speakers[p]), 1);
+        
+      }
+      for (var u = 0; u < judges.length; u++){
+        if (judges[u].length > 0){
+          var y = Math.floor(Math.random() * judges[u].length);
+          placement[n][2].push(judges[u][y]);
+          judges[u].splice(judges[u].indexOf(judges[u][y]), 1);
+          break;
         }
-        if (remainingJudges > 0){
-          var judge = judges[u];
-          placement[n][2].push(judge);
-          judges.splice(judges.indexOf(judge), 1);
-          u++;
-          remainingJudges--;
-        }
+      }
     }
   }
-  
+  //SpreadsheetApp.getUi().alert(`Placement: ${placement} \nJudges: ${judges} \nSpeakers: ${speakers}`);
   return placement;
 }
-
 
 
 /**
@@ -266,7 +271,7 @@ function drawRound(){
       var rooms = processRooms(roomSheet, numberRooms); // Array rooms and their codenames
 
       const placement = randomPlacement(speakers, judges, rooms);
-
+      SpreadsheetApp.getUi().alert(`Placement: ${placement}`);
       createRound(placement, roundName);
     }
     else{
@@ -286,8 +291,26 @@ function drawRound(){
  */
 function trial(){
   var speakers = [["Speaker1", "JAMHURI"], ["Speaker2", "KABARAK"], ["Speaker3", "JUJA"]];
-  var judges = [["JudgeA", 1], ["JudgeB", 2], ["JudgeC", 1]];
-  var rooms = [["Room 1", "Menengai"], ["Room 2", "Kilimanjaro"]];
+  var judges = [["JUNE MUSIMBI", "TRACY ANYANGO", "LUCY OSENYI", "GEORGE KIRITU", "ASHLEY ACHIENG"],
+  ["MERCY DUBE", "RAPHAEL DUBE", "BARASA MICAH", "IVY ROSE", "AYAKO HALIET", "FLEVIA VIVIAN"],
+  ["ANGELA KHISA", "BRENDA JULIET", "DENNIS MWENDA", "SYLVIA JEBET", "BRIAN IK", "PURITY MIRARWO", "WYCLIFFE OTIENO", "JOSEPH KENYATTA", "JUSTUS AUMBU"]
+  ];
+  var rooms = [["Briefing room 1",	"Kilimajanro"],
+["Room 10",	"Menangai"],
+["Room 11",	"Sop"],
+["Room 23",	"Joan"],
+["Room 25",	"Zoan"],
+["Room 26",	"Koan"],
+["Room 12",	"Koan"],
+["Room 8",	"LT2"],
+["Room 9",	"LT3"],
+["Room 18",	"LT4"],
+["Room 19",	"LT5"],
+["Room 20",	"LT6"],
+["Room 13",	"LT7"],
+["Room 14",	"LT8"],
+["Room 15",	"LT9"]
+];
   var result = randomPlacement(speakers, judges, rooms);
   resultNo = result.length;
   Logger.log(result);
